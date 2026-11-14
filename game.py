@@ -83,7 +83,10 @@ class Game:
             
                 algorithm_name = self.current_player.algorithm.__class__.__name__.replace("AI", "")
                 if getattr(self.current_player.algorithm, "use_pruning", False):
-                    algorithm_name += " (AlphaBeta)"
+                    if getattr(self.current_player.algorithm, "should_order_moves", False):
+                        algorithm_name += " (AlphaBeta + MoveOrdering)"
+                    else:
+                        algorithm_name += " (AlphaBeta)"
                 elif getattr(self.current_player.algorithm, "use_pruning", None) is False:
                     algorithm_name += " (No Pruning)"
 
@@ -155,10 +158,10 @@ class Game:
 
 
 if __name__ == "__main__":
-    # Minimax without pruning (Black) vs Minimax with Alpha-Beta pruning (White) in Iterative mode
+    # Minimax with Alpha-Beta pruning & Move Ordering (Black) vs GreedyAI (White)
     game = Game(
-        algorithm1=MinimaxAI(depth=10, search_mode="iterative", time_limit=2, use_pruning=False),
-        algorithm2=MinimaxAI(depth=10, search_mode="iterative", time_limit=2, use_pruning=True),
+        algorithm1=MinimaxAI(depth=10, search_mode="iterative", time_limit=2, use_pruning=True, use_move_ordering=True),
+        algorithm2=GreedyAI(),
         display_mode="pretty"
     )
     game.game_loop()
