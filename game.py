@@ -1,7 +1,6 @@
 from board import Board
 from player import Player
 from minimax import MinimaxAI
-from alpha_beta import AlphaBetaAI
 from baseline_ai import GreedyAI, RandomAI
 from terminal_ui import display_board
 
@@ -83,6 +82,10 @@ class Game:
             if self.current_player.is_bot:
             
                 algorithm_name = self.current_player.algorithm.__class__.__name__.replace("AI", "")
+                if getattr(self.current_player.algorithm, "use_pruning", False):
+                    algorithm_name += " (AlphaBeta)"
+                elif getattr(self.current_player.algorithm, "use_pruning", None) is False:
+                    algorithm_name += " (No Pruning)"
 
                 print(f"\n{colour} ({algorithm_name}) is thinking...")
 
@@ -152,10 +155,10 @@ class Game:
 
 
 if __name__ == "__main__":
-    # Minimax (Black) vs AlphaBeta (White)
+    # Minimax without pruning (Black) vs Minimax with Alpha-Beta pruning (White) in Iterative mode
     game = Game(
-        algorithm1=MinimaxAI(depth=4, search_mode="fixed", time_limit=5),
-        algorithm2=AlphaBetaAI(depth=4, search_mode="fixed", time_limit=5),
+        algorithm1=MinimaxAI(depth=10, search_mode="iterative", time_limit=2, use_pruning=False),
+        algorithm2=MinimaxAI(depth=10, search_mode="iterative", time_limit=2, use_pruning=True),
         display_mode="pretty"
     )
     game.game_loop()
