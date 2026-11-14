@@ -1,6 +1,7 @@
 from board import Board
 from player import Player
 from minimax import MinimaxAI
+from alpha_beta import AlphaBetaAI
 from baseline_ai import GreedyAI, RandomAI
 from terminal_ui import display_board
 
@@ -151,5 +152,10 @@ class Game:
 
 
 if __name__ == "__main__":
-    game = Game(algorithm1= MinimaxAI(depth = 4, search_mode="fixed", time_limit=5), algorithm2= MinimaxAI(depth=20, search_mode="iterative", time_limit=5), display_mode="matrix")
+    # Minimax (Black) vs AlphaBeta (White)
+    game = Game(
+        algorithm1=MinimaxAI(depth=4, search_mode="fixed", time_limit=5),
+        algorithm2=AlphaBetaAI(depth=4, search_mode="fixed", time_limit=5),
+        display_mode="pretty"
+    )
     game.game_loop()
