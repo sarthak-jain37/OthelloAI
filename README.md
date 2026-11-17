@@ -103,6 +103,12 @@ pip install -r requirements.txt
 
 ### 4. Run the Game
 
+**Option A: Interactive Streamlit Web UI (Recommended)**
+```bash
+streamlit run app.py
+```
+
+**Option B: Terminal Interface**
 ```bash
 python game.py
 ```
@@ -142,13 +148,14 @@ game.game_loop()
 
 ```text
 OthelloAI/
+├── app.py              # Interactive Streamlit Web UI (click-to-play board & visual controls)
 ├── board.py            # Board state, legal move validation, raycasting & disc flipping
 ├── player.py           # Player class (tokens, color, bot flag, algorithm assignment)
 ├── baseline_ai.py      # Baseline AI implementations (RandomAI, GreedyAI)
 ├── minimax.py          # Minimax, Alpha-Beta pruning, Move Ordering & Iterative Deepening
 ├── terminal_ui.py      # Rich terminal board rendering & UI helpers
 ├── game.py             # Main game loop, turn coordinator, display manager & match runner
-├── requirements.txt    # Python dependencies (rich, markdown-it-py, etc.)
+├── requirements.txt    # Python dependencies (streamlit, rich, markdown-it-py, etc.)
 └── README.md           # Project documentation
 ```
 
