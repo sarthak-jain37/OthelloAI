@@ -31,28 +31,20 @@ class MinimaxAI:
         time_limit=5,
         use_pruning=True,
         use_move_ordering=True,
-        heuristic=None,
-        **kwargs
+        heuristic=None
     ):
         self.depth = depth
         self.search_mode = search_mode
         self.time_limit = time_limit
         self.use_pruning = use_pruning
+        self.use_move_ordering = use_move_ordering
+        self.should_order_moves = use_pruning and use_move_ordering
         self.heuristic = heuristic
         self.start_time = None
         self.nodes_evaluated = 0
 
         if search_mode not in ("fixed", "iterative"):
             raise ValueError("Search mode must be 'fixed' or 'iterative'")
-
-        # Supports boolean True/False or string "enabled"/"disabled"
-        val = kwargs.get("move_ordering", use_move_ordering)
-        if isinstance(val, str):
-            self.use_move_ordering = val.lower() in ("enabled", "true")
-        else:
-            self.use_move_ordering = bool(val)
-
-        self.should_order_moves = self.use_pruning and self.use_move_ordering
 
     def get_move_priority(self, move):
         """
