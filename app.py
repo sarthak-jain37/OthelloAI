@@ -12,28 +12,28 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Custom CSS reproducing the exact Google Doodle Othello board and Chess.com valid move rings
-st.markdown("""
+# Robust CSS styling that targets both Safari and Chrome engines
+st.html("""
 <style>
-    /* Dark app background matching the Doodle theme */
+    /* Dark app background matching Google Doodle theme */
     .stApp {
-        background-color: #191b1a;
-        color: #ffffff;
+        background-color: #181a19 !important;
+        color: #ffffff !important;
     }
     
-    /* Hide default header/footer padding */
     .block-container {
-        padding-top: 2rem !important;
+        padding-top: 1.5rem !important;
         padding-bottom: 2rem !important;
-        max-width: 580px !important;
+        max-width: 560px !important;
     }
     
     /* Top Scoreboard Card */
     .score-card {
+        max-width: 520px;
+        margin: 0 auto 12px auto;
         background-color: #242625;
         border-radius: 14px;
-        padding: 22px 42px 18px 42px;
-        margin-bottom: 14px;
+        padding: 20px 38px 16px 38px;
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
@@ -48,19 +48,19 @@ st.markdown("""
     }
     
     .score-disc {
-        width: 50px;
-        height: 50px;
+        width: 48px;
+        height: 48px;
         border-radius: 50%;
         display: inline-block;
     }
     
     .score-disc.black {
-        background: #181a19;
+        background: #191c1b;
         box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
     }
     
     .score-disc.white {
-        background: #f4fdfb;
+        background: #f5fdfc;
         box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
     }
     
@@ -75,7 +75,7 @@ st.markdown("""
         width: 100%;
         display: flex;
         justify-content: center;
-        margin-top: 14px;
+        margin-top: 12px;
     }
     
     .turn-pill {
@@ -90,137 +90,130 @@ st.markdown("""
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     }
     
-    /* Board Outer Frame */
-    .othello-board-wrapper {
-        width: 100%;
-        max-width: 540px;
-        margin: 0 auto;
-        background-color: #009668; /* Iconic Google Doodle green */
-        border: 3px solid #00452f;
-        border-radius: 4px;
-        position: relative;
-        overflow: hidden;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    }
-    
-    /* Star Points (Hoshi dots) on the board intersections */
-    .hoshi {
-        width: 8px;
-        height: 8px;
-        background-color: #00281b;
-        border-radius: 50%;
-        position: absolute;
-        transform: translate(-50%, -50%);
-        z-index: 5;
-        pointer-events: none;
-    }
-    
-    /* Eliminate all column gaps */
-    div[data-testid="stHorizontalBlock"] {
-        gap: 0 !important;
-        margin: 0 !important;
+    /* Othello Board Outer Container */
+    div.st-key-board_container {
+        max-width: 520px !important;
+        margin: 0 auto !important;
+        background-color: #009668 !important;
+        border: 3px solid #00452f !important;
+        border-radius: 4px !important;
         padding: 0 !important;
+        position: relative !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
     }
     
-    div[data-testid="column"] {
-        padding: 0 !important;
-        margin: 0 !important;
-        min-width: 0 !important;
+    /* Strip away all Streamlit default block and column gaps inside board */
+    div.st-key-board_container div[data-testid="stVerticalBlock"] {
+        gap: 0px !important;
+        padding: 0px !important;
+        margin: 0px !important;
     }
     
-    .stButton {
-        margin: 0 !important;
-        padding: 0 !important;
+    div.st-key-board_container div[data-testid="stHorizontalBlock"] {
+        gap: 0px !important;
+        padding: 0px !important;
+        margin: 0px !important;
+    }
+    
+    div.st-key-board_container div[data-testid="column"],
+    div.st-key-board_container div[data-testid="stColumn"] {
+        padding: 0px !important;
+        margin: 0px !important;
+        min-width: 0px !important;
+        flex: 1 1 0px !important;
+    }
+    
+    div.st-key-board_container .stButton {
+        margin: 0px !important;
+        padding: 0px !important;
         width: 100% !important;
+        line-height: 0 !important;
     }
     
     /* Square Buttons */
-    .stButton > button {
+    div.st-key-board_container .stButton > button {
         width: 100% !important;
         aspect-ratio: 1 / 1 !important;
         height: auto !important;
-        min-height: 58px !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        border-radius: 0 !important;
+        min-height: 56px !important;
+        max-height: 64px !important;
+        padding: 0px !important;
+        margin: 0px !important;
+        border-radius: 0px !important;
         background-color: #009668 !important;
         border: 1px solid #004d35 !important;
-        box-shadow: none !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
+        box-shadow: none !important;
         position: relative !important;
-        transition: none !important;
     }
     
-    /* Keep disabled squares fully visible and green */
-    .stButton > button:disabled {
+    div.st-key-board_container .stButton > button:disabled {
         opacity: 1 !important;
         cursor: default !important;
         background-color: #009668 !important;
         border: 1px solid #004d35 !important;
     }
     
-    /* Hide button text */
-    .stButton > button p {
-        display: none !important;
-    }
-    
-    /* Black Piece: Perfect round circular disc */
-    button[aria-label="black"]::after {
-        content: "" !important;
-        width: 80% !important;
-        height: 80% !important;
-        border-radius: 50% !important;
-        background: #181b19 !important;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.45) !important;
+    /* Direct styling on the <p> DOM element inside the button for 100% Safari/WebKit compatibility */
+    div.st-key-board_container button p {
+        margin: 0 auto !important;
+        padding: 0 !important;
         display: block !important;
     }
     
-    /* White Piece: Perfect round circular disc */
-    button[aria-label="white"]::after {
-        content: "" !important;
-        width: 80% !important;
-        height: 80% !important;
+    /* 1. Black Coin: True 100% round geometric circle */
+    div.st-key-board_container button[aria-label="black"] p {
+        font-size: 0px !important;
+        width: 44px !important;
+        height: 44px !important;
         border-radius: 50% !important;
-        background: #f4fdfb !important;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) !important;
-        display: block !important;
+        background: #191c1b !important;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.45) !important;
     }
     
-    /* Valid Move: Hollow ring matching Chess.com and the Google Doodle image */
-    button[aria-label="valid"] {
+    /* 2. White Coin: True 100% round geometric circle */
+    div.st-key-board_container button[aria-label="white"] p {
+        font-size: 0px !important;
+        width: 44px !important;
+        height: 44px !important;
+        border-radius: 50% !important;
+        background: #f5fdfc !important;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25) !important;
+    }
+    
+    /* 3. Valid Move: Hollow ring matching Chess.com and Google Doodle */
+    div.st-key-board_container button[aria-label="valid"] {
         cursor: pointer !important;
     }
     
-    button[aria-label="valid"]::after {
-        content: "" !important;
-        width: 74% !important;
-        height: 74% !important;
+    div.st-key-board_container button[aria-label="valid"] p {
+        font-size: 0px !important;
+        width: 40px !important;
+        height: 40px !important;
         border-radius: 50% !important;
-        border: 2px solid rgba(0, 50, 35, 0.7) !important;
+        border: 2.5px solid rgba(0, 55, 35, 0.7) !important;
         background: transparent !important;
-        display: block !important;
         transition: transform 0.15s ease, border-color 0.15s ease, background-color 0.15s ease !important;
     }
     
-    button[aria-label="valid"]:hover::after {
-        border-color: rgba(0, 30, 20, 0.95) !important;
+    div.st-key-board_container button[aria-label="valid"]:hover p {
+        border-color: rgba(0, 25, 15, 0.95) !important;
         background-color: rgba(0, 0, 0, 0.08) !important;
-        transform: scale(1.05) !important;
+        transform: scale(1.08) !important;
     }
     
-    /* Empty squares */
-    button[aria-label="empty"]::after {
-        content: "" !important;
+    /* 4. Empty Square: completely clear */
+    div.st-key-board_container button[aria-label="empty"] p {
         display: none !important;
     }
 </style>
-""", unsafe_allow_html=True)
+""")
 
 
 def create_ai_agent(algorithm_name, depth, search_mode, time_limit):
-    """Factory function for creating AI players."""
+    """Instantiate AI agent."""
     if algorithm_name == "Alpha-Beta + Move Ordering":
         return MinimaxAI(depth=depth, search_mode=search_mode, time_limit=time_limit, use_pruning=True, use_move_ordering=True)
     elif algorithm_name == "Alpha-Beta (No Move Ordering)":
@@ -235,7 +228,7 @@ def create_ai_agent(algorithm_name, depth, search_mode, time_limit):
 
 
 def init_game():
-    """Initialize or reset session game state."""
+    """Reset session game state."""
     st.session_state.board = Board()
     st.session_state.current_colour = 1  # Black moves first
     st.session_state.game_over = False
@@ -247,7 +240,7 @@ if "board" not in st.session_state:
     init_game()
 
 
-# --- SIDEBAR CONTROLS ---
+# --- SIDEBAR CONFIGURATION ---
 with st.sidebar:
     st.header("⚙️ Game Options")
 
@@ -301,7 +294,7 @@ with st.sidebar:
         step_delay = st.slider("Delay (s)", 0.1, 2.0, 0.5, step=0.1)
 
 
-# Player instances
+# Setup Players
 player_black = Player(1, is_bot=black_is_bot, algorithm=black_agent)
 player_white = Player(-1, is_bot=white_is_bot, algorithm=white_agent)
 
@@ -339,12 +332,11 @@ if st.session_state.game_over:
 elif not current_player.is_bot:
     turn_text = "Your turn"
 else:
-    algo_label = "AI thinking..."
-    turn_text = algo_label
+    turn_text = "AI thinking..."
 
 
-# --- RENDER TOP SCORE CARD (Matching the image exactly) ---
-st.markdown(f"""
+# --- TOP SCORE CARD (Matching the Google Doodle reference) ---
+st.html(f"""
 <div class="score-card">
     <div class="score-player">
         <div class="score-disc black"></div>
@@ -358,53 +350,52 @@ st.markdown(f"""
         <span class="turn-pill">{turn_text}</span>
     </div>
 </div>
-""", unsafe_allow_html=True)
+""")
 
 
-# --- RENDER 8x8 BOARD WITH HOSHI DOTS & VALID HOLLOW RINGS ---
+# --- 8x8 BOARD WITH 4 HOSHI DOTS & VALID HOLLOW RINGS ---
 board_matrix = board.board
 
-st.markdown('<div class="othello-board-wrapper">', unsafe_allow_html=True)
+with st.container(key="board_container"):
+    # 4 Star Points (Hoshi dots) exactly on the intersections at 25% and 75%
+    st.html("""
+    <div style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; z-index: 10;">
+        <div style="position: absolute; top: 25%; left: 25%; width: 8px; height: 8px; background: #00281b; border-radius: 50%; transform: translate(-50%, -50%);"></div>
+        <div style="position: absolute; top: 25%; left: 75%; width: 8px; height: 8px; background: #00281b; border-radius: 50%; transform: translate(-50%, -50%);"></div>
+        <div style="position: absolute; top: 75%; left: 25%; width: 8px; height: 8px; background: #00281b; border-radius: 50%; transform: translate(-50%, -50%);"></div>
+        <div style="position: absolute; top: 75%; left: 75%; width: 8px; height: 8px; background: #00281b; border-radius: 50%; transform: translate(-50%, -50%);"></div>
+    </div>
+    """)
 
-# 4 Star Points (Hoshi dots) exactly as positioned in the image
-st.markdown("""
-<div class="hoshi" style="top: 25%; left: 25%;"></div>
-<div class="hoshi" style="top: 25%; left: 75%;"></div>
-<div class="hoshi" style="top: 75%; left: 25%;"></div>
-<div class="hoshi" style="top: 75%; left: 75%;"></div>
-""", unsafe_allow_html=True)
+    for r in range(8):
+        cols = st.columns(8, gap=0)
+        for c in range(8):
+            cell_val = board_matrix[r][c]
+            is_legal = (r, c) in valid_moves
+            button_key = f"c_{r}_{c}"
 
-for r in range(8):
-    cols = st.columns(8, gap=0)
-    for c in range(8):
-        cell_val = board_matrix[r][c]
-        is_legal = (r, c) in valid_moves
-        button_key = f"c_{r}_{c}"
+            if cell_val == 1:
+                label = "black"
+                disabled = True
+            elif cell_val == -1:
+                label = "white"
+                disabled = True
+            elif is_legal and not current_player.is_bot and not st.session_state.game_over:
+                label = "valid"
+                disabled = False
+            elif is_legal:
+                label = "valid"
+                disabled = True
+            else:
+                label = "empty"
+                disabled = True
 
-        if cell_val == 1:
-            label = "black"
-            disabled = True
-        elif cell_val == -1:
-            label = "white"
-            disabled = True
-        elif is_legal and not current_player.is_bot and not st.session_state.game_over:
-            label = "valid"
-            disabled = False
-        elif is_legal:
-            label = "valid"
-            disabled = True
-        else:
-            label = "empty"
-            disabled = True
-
-        with cols[c]:
-            if st.button(label, key=button_key, disabled=disabled):
-                board.make_move(current_player, r, c)
-                st.session_state.history.append((current_player.colour, (r, c)))
-                st.session_state.current_colour = -current_player.colour
-                st.rerun()
-
-st.markdown('</div>', unsafe_allow_html=True)
+            with cols[c]:
+                if st.button(label, key=button_key, disabled=disabled):
+                    board.make_move(current_player, r, c)
+                    st.session_state.history.append((current_player.colour, (r, c)))
+                    st.session_state.current_colour = -current_player.colour
+                    st.rerun()
 
 
 # --- AI TURN HANDLING ---
@@ -414,7 +405,7 @@ if not st.session_state.game_over and current_player.is_bot:
         ai_can_step = st.button("▶️ Step AI Move", use_container_width=True)
 
     if ai_can_step:
-        time.sleep(0.15)  # Visual pause so human perceives turn transition
+        time.sleep(0.15)
         move = current_player.algorithm.find_best_move(board, current_player)
         if move:
             r, c = move
