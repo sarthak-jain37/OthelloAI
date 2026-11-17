@@ -24,22 +24,37 @@ MOVE_ORDER_WEIGHTS = [
 
 class MinimaxAI:
 
-    def __init__(self, depth=4, search_mode="fixed", time_limit=5, use_pruning=True, use_move_ordering=True):
+    def __init__(
+        self,
+        depth=4,
+        search_mode="fixed",
+        time_limit=5,
+        use_pruning=True,
+        use_move_ordering=True,
+        move_ordering="enabled",
+        heuristic=None
+    ):
         self.depth = depth
         self.search_mode = search_mode
         self.time_limit = time_limit
         self.use_pruning = use_pruning
-        self.use_move_ordering = use_move_ordering
+        self.heuristic = heuristic
         self.start_time = None
         self.nodes_evaluated = 0
 
         if search_mode not in ("fixed", "iterative"):
             raise ValueError("Search mode must be 'fixed' or 'iterative'")
 
-    @property
-    def should_order_moves(self):
-        # Move ordering only works when Minimax is using Alpha-Beta pruning
-        return self.use_pruning and self.use_move_ordering
+        # Move ordering mode: "enabled" or "disabled" (similar to search_mode and display_mode)
+        # Also respects use_move_ordering flag
+        if move_ordering not in ("enabled", "disabled"):
+            move_ordering = "enabled" if use_move_ordering else "disabled"
+        if not use_move_ordering:
+            move_ordering = "disabled"
+
+        self.move_ordering = move_ordering
+        self.use_move_ordering = (self.move_ordering == "enabled")
+        self.should_order_moves = self.use_pruning and self.use_move_ordering
 
     def get_move_priority(self, move):
         """
@@ -62,6 +77,9 @@ class MinimaxAI:
 
     # Evaluation function
     def evaluate(self, board, player):
+        if self.heuristic is not None:
+            return self.heuristic(board, player)
+
         opponent_colour = -player.colour
 
         player_score = sum(
