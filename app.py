@@ -12,8 +12,8 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Robust CSS styling that targets both Safari and Chrome engines
-st.html("""
+# Robust CSS injection using st.markdown(..., unsafe_allow_html=True)
+st.markdown("""
 <style>
     /* Dark app background matching Google Doodle theme */
     .stApp {
@@ -29,65 +29,67 @@ st.html("""
     
     /* Top Scoreboard Card */
     .score-card {
-        max-width: 520px;
-        margin: 0 auto 12px auto;
-        background-color: #242625;
-        border-radius: 14px;
-        padding: 20px 38px 16px 38px;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        align-items: center;
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+        max-width: 520px !important;
+        margin: 0 auto 12px auto !important;
+        background-color: #242625 !important;
+        border-radius: 14px !important;
+        padding: 20px 38px 16px 38px !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4) !important;
     }
     
     .score-player {
-        display: flex;
-        align-items: center;
-        gap: 16px;
+        display: flex !important;
+        align-items: center !important;
+        gap: 16px !important;
     }
     
     .score-disc {
-        width: 48px;
-        height: 48px;
-        border-radius: 50%;
-        display: inline-block;
+        width: 48px !important;
+        height: 48px !important;
+        border-radius: 50% !important;
+        display: inline-block !important;
     }
     
     .score-disc.black {
-        background: #191c1b;
-        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
+        background: #191c1b !important;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5) !important;
+        border: 1px solid #101211 !important;
     }
     
     .score-disc.white {
-        background: #f5fdfc;
-        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25);
+        background: #f5fdfc !important;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25) !important;
+        border: 1px solid #d8e2de !important;
     }
     
     .score-number {
-        color: #ffffff;
-        font-size: 26px;
-        font-weight: 700;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        color: #ffffff !important;
+        font-size: 26px !important;
+        font-weight: 700 !important;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
     }
     
     .turn-pill-container {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        margin-top: 12px;
+        width: 100% !important;
+        display: flex !important;
+        justify-content: center !important;
+        margin-top: 12px !important;
     }
     
     .turn-pill {
-        background-color: #2b76ee;
-        color: #ffffff;
-        font-size: 13px;
-        font-weight: 700;
-        padding: 5px 16px;
-        border-radius: 14px;
-        display: inline-block;
-        letter-spacing: 0.2px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        background-color: #2b76ee !important;
+        color: #ffffff !important;
+        font-size: 13px !important;
+        font-weight: 700 !important;
+        padding: 5px 16px !important;
+        border-radius: 14px !important;
+        display: inline-block !important;
+        letter-spacing: 0.2px !important;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
     }
     
     /* Othello Board Outer Container */
@@ -97,12 +99,12 @@ st.html("""
         background-color: #009668 !important;
         border: 3px solid #00452f !important;
         border-radius: 4px !important;
-        padding: 0 !important;
+        padding: 0px !important;
         position: relative !important;
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5) !important;
     }
     
-    /* Strip away all Streamlit default block and column gaps inside board */
+    /* Strip away all gaps and margins between rows and columns */
     div.st-key-board_container div[data-testid="stVerticalBlock"] {
         gap: 0px !important;
         padding: 0px !important;
@@ -130,7 +132,7 @@ st.html("""
         line-height: 0 !important;
     }
     
-    /* Square Buttons */
+    /* Exact Square Buttons */
     div.st-key-board_container .stButton > button {
         width: 100% !important;
         aspect-ratio: 1 / 1 !important;
@@ -156,60 +158,72 @@ st.html("""
         border: 1px solid #004d35 !important;
     }
     
-    /* Direct styling on the <p> DOM element inside the button for 100% Safari/WebKit compatibility */
+    /* Direct styling on the <p> DOM element inside the button for 100% cross-browser rendering */
     div.st-key-board_container button p {
         margin: 0 auto !important;
-        padding: 0 !important;
+        padding: 0px !important;
         display: block !important;
+        line-height: 0 !important;
     }
     
     /* 1. Black Coin: True 100% round geometric circle */
-    div.st-key-board_container button[aria-label="black"] p {
+    div.st-key-board_container button[aria-label="black"] p,
+    div.st-key-board_container div[class*="_black"] button p {
         font-size: 0px !important;
         width: 44px !important;
         height: 44px !important;
         border-radius: 50% !important;
         background: #191c1b !important;
         box-shadow: 0 3px 6px rgba(0, 0, 0, 0.45) !important;
+        border: 1px solid #101211 !important;
+        display: block !important;
     }
     
     /* 2. White Coin: True 100% round geometric circle */
-    div.st-key-board_container button[aria-label="white"] p {
+    div.st-key-board_container button[aria-label="white"] p,
+    div.st-key-board_container div[class*="_white"] button p {
         font-size: 0px !important;
         width: 44px !important;
         height: 44px !important;
         border-radius: 50% !important;
         background: #f5fdfc !important;
         box-shadow: 0 3px 6px rgba(0, 0, 0, 0.25) !important;
+        border: 1px solid #d8e2de !important;
+        display: block !important;
     }
     
     /* 3. Valid Move: Hollow ring matching Chess.com and Google Doodle */
-    div.st-key-board_container button[aria-label="valid"] {
+    div.st-key-board_container button[aria-label="valid"],
+    div.st-key-board_container div[class*="_valid"] button {
         cursor: pointer !important;
     }
     
-    div.st-key-board_container button[aria-label="valid"] p {
+    div.st-key-board_container button[aria-label="valid"] p,
+    div.st-key-board_container div[class*="_valid"] button p {
         font-size: 0px !important;
         width: 40px !important;
         height: 40px !important;
         border-radius: 50% !important;
-        border: 2.5px solid rgba(0, 55, 35, 0.7) !important;
+        border: 2.5px solid rgba(0, 55, 35, 0.75) !important;
         background: transparent !important;
+        display: block !important;
         transition: transform 0.15s ease, border-color 0.15s ease, background-color 0.15s ease !important;
     }
     
-    div.st-key-board_container button[aria-label="valid"]:hover p {
+    div.st-key-board_container button[aria-label="valid"]:hover p,
+    div.st-key-board_container div[class*="_valid"] button:hover p {
         border-color: rgba(0, 25, 15, 0.95) !important;
         background-color: rgba(0, 0, 0, 0.08) !important;
         transform: scale(1.08) !important;
     }
     
     /* 4. Empty Square: completely clear */
-    div.st-key-board_container button[aria-label="empty"] p {
+    div.st-key-board_container button[aria-label="empty"] p,
+    div.st-key-board_container div[class*="_empty"] button p {
         display: none !important;
     }
 </style>
-""")
+""", unsafe_allow_html=True)
 
 
 def create_ai_agent(algorithm_name, depth, search_mode, time_limit):
@@ -335,8 +349,8 @@ else:
     turn_text = "AI thinking..."
 
 
-# --- TOP SCORE CARD (Matching the Google Doodle reference) ---
-st.html(f"""
+# --- TOP SCORE CARD (Rendered via st.markdown for proper styling) ---
+st.markdown(f"""
 <div class="score-card">
     <div class="score-player">
         <div class="score-disc black"></div>
@@ -350,7 +364,7 @@ st.html(f"""
         <span class="turn-pill">{turn_text}</span>
     </div>
 </div>
-""")
+""", unsafe_allow_html=True)
 
 
 # --- 8x8 BOARD WITH 4 HOSHI DOTS & VALID HOLLOW RINGS ---
@@ -358,21 +372,20 @@ board_matrix = board.board
 
 with st.container(key="board_container"):
     # 4 Star Points (Hoshi dots) exactly on the intersections at 25% and 75%
-    st.html("""
+    st.markdown("""
     <div style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; pointer-events: none; z-index: 10;">
         <div style="position: absolute; top: 25%; left: 25%; width: 8px; height: 8px; background: #00281b; border-radius: 50%; transform: translate(-50%, -50%);"></div>
         <div style="position: absolute; top: 25%; left: 75%; width: 8px; height: 8px; background: #00281b; border-radius: 50%; transform: translate(-50%, -50%);"></div>
         <div style="position: absolute; top: 75%; left: 25%; width: 8px; height: 8px; background: #00281b; border-radius: 50%; transform: translate(-50%, -50%);"></div>
         <div style="position: absolute; top: 75%; left: 75%; width: 8px; height: 8px; background: #00281b; border-radius: 50%; transform: translate(-50%, -50%);"></div>
     </div>
-    """)
+    """, unsafe_allow_html=True)
 
     for r in range(8):
         cols = st.columns(8, gap=0)
         for c in range(8):
             cell_val = board_matrix[r][c]
             is_legal = (r, c) in valid_moves
-            button_key = f"c_{r}_{c}"
 
             if cell_val == 1:
                 label = "black"
@@ -389,6 +402,8 @@ with st.container(key="board_container"):
             else:
                 label = "empty"
                 disabled = True
+
+            button_key = f"c_{r}_{c}_{label}"
 
             with cols[c]:
                 if st.button(label, key=button_key, disabled=disabled):
