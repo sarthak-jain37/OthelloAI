@@ -31,8 +31,8 @@ class NegamaxAI:
         time_limit=5,
         use_pruning=True,
         use_move_ordering=True,
-        move_ordering="enabled",
-        heuristic=None
+        heuristic=None,
+        **kwargs
     ):
         self.depth = depth
         self.search_mode = search_mode
@@ -45,15 +45,13 @@ class NegamaxAI:
         if search_mode not in ("fixed", "iterative"):
             raise ValueError("Search mode must be 'fixed' or 'iterative'")
 
-        # Move ordering mode: "enabled" or "disabled" (similar to search_mode and display_mode)
-        # Also respects use_move_ordering flag
-        if move_ordering not in ("enabled", "disabled"):
-            move_ordering = "enabled" if use_move_ordering else "disabled"
-        if not use_move_ordering:
-            move_ordering = "disabled"
+        # Supports boolean True/False or string "enabled"/"disabled"
+        val = kwargs.get("move_ordering", use_move_ordering)
+        if isinstance(val, str):
+            self.use_move_ordering = val.lower() in ("enabled", "true")
+        else:
+            self.use_move_ordering = bool(val)
 
-        self.move_ordering = move_ordering
-        self.use_move_ordering = (self.move_ordering == "enabled")
         self.should_order_moves = self.use_pruning and self.use_move_ordering
 
     def get_move_priority(self, move):
