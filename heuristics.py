@@ -30,9 +30,21 @@ see `to_vector` / `from_vector`.
 # --------------------------------------------------------------------------
 
 N = 8
-# DIRECTIONS and RAYS (squares in each direction from each square, nearest
-# first) are shared with board.py.
-from board import DIRECTIONS, RAYS
+DIRECTIONS = [(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)]
+
+# For each square, the rays in all 8 directions as lists of (r, c).
+RAYS = [[[] for _ in range(N)] for _ in range(N)]
+for _r in range(N):
+    for _c in range(N):
+        for _dr, _dc in DIRECTIONS:
+            ray = []
+            x, y = _r + _dr, _c + _dc
+            while 0 <= x < N and 0 <= y < N:
+                ray.append((x, y))
+                x += _dr
+                y += _dc
+            if len(ray) >= 2:          # a capture needs at least 2 squares
+                RAYS[_r][_c].append(ray)
 
 # 8-neighbours of each square (for frontier).
 NEIGHBOURS = [[[(_r + dr, _c + dc) for dr, dc in DIRECTIONS
