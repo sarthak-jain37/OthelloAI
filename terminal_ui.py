@@ -1,110 +1,43 @@
-
-from rich.console import Console
-from rich.table import Table
-from rich.panel import Panel
-from rich.text import Text
-from rich.box import SQUARE
-
-console = Console()
-
+# Terminal UI for Othello without third-party dependencies (no rich required)
 
 def display_board(board, valid_moves, current_player, black_score, white_score):
+    # ANSI Escape codes
+    RESET = "\033[0m"
+    BOLD = "\033[1m"
+    CYAN = "\033[96m"
+    GREEN = "\033[92m"
+    DIM_GREEN = "\033[2;32m"
+    WHITE = "\033[97m"
+    BLACK_PIECE = "\033[90m●\033[0m"
+    WHITE_PIECE = "\033[97m●\033[0m"
 
-    console.clear()
+    print("\n" + "=" * 45)
+    print(f"{BOLD}{CYAN}             O T H E L L O{RESET}")
+    print("=" * 45)
+    print(f"      {BOLD}BLACK:{RESET} {black_score}    |    {BOLD}WHITE:{RESET} {white_score}")
+    print("-" * 45)
 
-    # Title
-    console.print(
-        Panel(
-            "[bold cyan]O T H E L L O[/bold cyan]\n"
-            "[dim]Human vs Human[/dim]",
-            expand=False,
-            border_style="green"
-        ),
-        justify="center"
-    )
-
-    # Scoreboard
-    scores = Table.grid(expand=True)
-    scores.add_column(justify="center")
-    scores.add_column(justify="center")
-
-    scores.add_row(
-        f"[bold bright_white]BLACK: {black_score}[/bold bright_white]",
-        f"[bold cyan]WHITE: {white_score}[/bold cyan]"
-    )
-
-    console.print(scores)
-    console.print()
-
-    # Board
-    table = Table(
-        show_header=True,
-        header_style="bold cyan",
-        border_style="green",
-        box=SQUARE,
-        padding=(1, 1),
-        expand=False
-    )
-
-    table.add_column(" ", justify="center", width=3)
-
-    for j in range(8):
-        table.add_column(
-            str(j),
-            justify="center",
-            width=5
-        )
+    # Column headers
+    header = "    " + "   ".join(str(j) for j in range(8))
+    print(f"{BOLD}{CYAN}{header}{RESET}")
+    print("  +" + "---+" * 8)
 
     for i in range(8):
-
-        row = [f"[bold cyan]{i}[/bold cyan]"]
-
+        row_str = f"{BOLD}{CYAN}{i}{RESET} |"
         for j in range(8):
-
-            if board[i][j] == 1:
-                cell = Text("●", style="bold black")
-
-            elif board[i][j] == -1:
-                cell = Text("●", style="bold bright_white")
-
+            cell_val = board[i][j]
+            if cell_val == 1:
+                piece = BLACK_PIECE
+            elif cell_val == -1:
+                piece = WHITE_PIECE
             elif (i, j) in valid_moves:
-                cell = Text("✦", style="bold bright_green")
-
+                piece = f"{GREEN}✦{RESET}"
             else:
-                cell = Text("·", style="dim green")
+                piece = f"{DIM_GREEN}·{RESET}"
+            row_str += f" {piece} |"
+        print(row_str)
+        print("  +" + "---+" * 8)
 
-            row.append(cell)
-
-        table.add_row(*row)
-
-    console.print(table, justify="center")
-
-    # Turn indicator
-    colour = (
-        "BLACK" if current_player.colour == 1
-        else "WHITE"
-    )
-
-    turn_style = (
-        "bold bright_white" if current_player.colour == 1
-        else "bold cyan"
-    )
-
-    console.print()
-
-    console.print(
-        Panel(
-            f"[{turn_style}]{colour}'S TURN[/{turn_style}]\n"
-            "[dim]Enter row and column (e.g. 2 4)[/dim]",
-            border_style="green",
-            expand=False
-        ),
-        justify="center"
-    )
-
-    # Legend
-    console.print(
-        "\n[dim]● Black piece    ● White piece    "
-        "[bold bright_green]✦[/bold bright_green] Legal move[/dim]",
-        justify="center"
-    )
+    colour_name = "BLACK" if current_player.colour == 1 else "WHITE"
+    print(f"\n{BOLD}{colour_name}'S TURN{RESET}")
+    print("=" * 45 + "\n")
