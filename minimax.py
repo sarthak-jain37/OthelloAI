@@ -24,12 +24,21 @@ MOVE_ORDER_WEIGHTS = [
 
 class MinimaxAI:
 
-    def __init__(self, depth=4, search_mode="fixed", time_limit=5, use_pruning=True, use_move_ordering=True):
+    def __init__(
+        self,
+        depth=4,
+        search_mode="fixed",
+        time_limit=5,
+        use_pruning=True,
+        use_move_ordering=True,
+        heuristic=None
+    ):
         self.depth = depth
         self.search_mode = search_mode
         self.time_limit = time_limit
         self.use_pruning = use_pruning
         self.use_move_ordering = use_move_ordering
+        self.heuristic = heuristic
         self.start_time = None
         self.nodes_evaluated = 0
 
@@ -62,6 +71,9 @@ class MinimaxAI:
 
     # Evaluation function
     def evaluate(self, board, player):
+        if self.heuristic is not None:
+            return self.heuristic(board, player)
+
         opponent_colour = -player.colour
 
         player_score = sum(
