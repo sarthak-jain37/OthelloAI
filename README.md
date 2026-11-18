@@ -148,22 +148,22 @@ game.game_loop()
 
 ```text
 OthelloAI/
-├── app.py              # Interactive Streamlit Web UI (click-to-play board & visual controls)
-├── board.py            # Board state, legal move validation, raycasting & disc flipping
-├── player.py           # Player class (tokens, color, bot flag, algorithm assignment)
-├── baseline_ai.py      # Baseline AI implementations (RandomAI, GreedyAI)
-├── minimax.py          # Minimax, Alpha-Beta pruning, Move Ordering & Iterative Deepening
-├── terminal_ui.py      # Rich terminal board rendering & UI helpers
-├── game.py             # Main game loop, turn coordinator, display manager & match runner
-├── requirements.txt    # Python dependencies (streamlit, rich, markdown-it-py, etc.)
-└── README.md           # Project documentation
+├── algorithms/                 # Adversarial Search & Heuristic Evaluation Engines
+│   ├── baseline_ai.py          # Baseline AI implementations (RandomAI, GreedyAI)
+│   ├── heuristics.py           # Evaluation functions (H0 Disc Diff, H1 Positional Table, H2 CMAC, H3 9-feature)
+│   ├── minimax.py              # Minimax, Alpha-Beta pruning, Move Ordering & Iterative Deepening
+│   └── negamax.py              # Zero-sum Negamax search engine with symmetric evaluation
+├── core/                       # Core Game Rules & Domain Models
+│   ├── board.py                # Board state, legal move validation, raycasting & disc flipping
+│   ├── game.py                 # Main game loop, turn coordinator, display manager & match runner
+│   └── player.py               # Player model (tokens, color, bot flag, algorithm assignment)
+├── ui/                         # Presentation Layer
+│   └── terminal_ui.py          # Rich terminal board rendering & UI helpers
+├── tournament_results/         # Generated tournament exports (CSV, JSON)
+├── app.py                      # Interactive Streamlit Web UI (click-to-play board & visual controls)
+├── tournament.py               # Two-stage parallel tournament runner with auto-checkpointing
+├── tournament_state.json       # Resumable tournament checkpoint state
+├── requirements.txt            # Python dependencies (streamlit, rich, etc.)
+└── README.md                   # Project documentation
 ```
 
----
-
-## Future Improvements
-
-- [ ] Transposition tables using Zobrist hashing for caching evaluated board states.
-- [ ] Negamax refactoring for compact code symmetry.
-- [ ] End-game perfect solver for the final 15–20 plies.
-- [ ] Dynamic mobility-based heuristic evaluation function.
