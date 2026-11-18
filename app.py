@@ -239,19 +239,20 @@ def create_ai_agent(algorithm_name, depth, search_mode, time_limit, heuristic_na
     }
     h_fn = heuristic_map.get(heuristic_name)
 
-    if algorithm_name == "Alpha-Beta + Move Ordering":
+    if algorithm_name in ["Minimax (Alpha-Beta + Move Ordering)", "Alpha-Beta + Move Ordering"]:
         return MinimaxAI(depth=depth, search_mode=search_mode, time_limit=time_limit, use_pruning=True, use_move_ordering=True, heuristic=h_fn)
-    elif algorithm_name == "Negamax (Alpha-Beta + Move Ordering)":
+    elif algorithm_name in ["Negamax (Alpha-Beta + Move Ordering)", "Negamax"]:
         return NegamaxAI(depth=depth, search_mode=search_mode, time_limit=time_limit, use_pruning=True, use_move_ordering=True, heuristic=h_fn)
-    elif algorithm_name == "Alpha-Beta (No Move Ordering)":
+    elif algorithm_name in ["Alpha-Beta (No Move Ordering)", "Minimax (Alpha-Beta)"]:
         return MinimaxAI(depth=depth, search_mode=search_mode, time_limit=time_limit, use_pruning=True, use_move_ordering=False, heuristic=h_fn)
-    elif algorithm_name == "Plain Minimax (No Pruning)":
+    elif algorithm_name in ["Plain Minimax (No Pruning)", "Minimax", "Plain Minimax"]:
         return MinimaxAI(depth=depth, search_mode=search_mode, time_limit=time_limit, use_pruning=False, use_move_ordering=False, heuristic=h_fn)
     elif algorithm_name == "Greedy AI":
         return GreedyAI()
     elif algorithm_name == "Random AI":
         return RandomAI()
-    return None
+    # Safe default fallback
+    return MinimaxAI(depth=depth, search_mode=search_mode, time_limit=time_limit, use_pruning=True, use_move_ordering=True, heuristic=h_fn)
 
 
 def init_game():
@@ -442,7 +443,7 @@ with st.container(key="board_container"):
 
 
 # --- AI TURN HANDLING ---
-if not st.session_state.game_over and current_player.is_bot:
+if not st.session_state.game_over and current_player.is_bot and current_player.algorithm is not None:
     ai_can_step = True
     if game_mode == "AI vs AI" and not auto_step:
         ai_can_step = st.button("▶️ Step AI Move", use_container_width=True)
