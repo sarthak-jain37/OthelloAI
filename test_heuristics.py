@@ -264,15 +264,15 @@ class TestMinimaxIntegration(unittest.TestCase):
         self.assertGreater(h(b, Player(BLACK)), 0)      # the heuristic likes Black's position...
         ai = MinimaxAI(depth=2, time_limit=1e9, heuristic=h)
         ai.start_time = __import__("time").perf_counter()
-        score = ai.minimax(b, 2, Player(BLACK), True, Player(BLACK))
+        score = ai.minimax(b.board, 2, BLACK, True, BLACK)
         self.assertEqual(score, -100000 - 8)            # ...but the search must see a loss by 8
 
     def test_side_to_move_reaches_heuristic(self):
         from minimax import MinimaxAI
         seen = []
 
-        def recorder(board, player, to_move=None):
-            seen.append((player.colour, to_move))
+        def recorder(grid, colour, to_move=None):
+            seen.append((colour, to_move))
             return 0
 
         # Depth 1 from the opening: Black moves, so every leaf has White to move
@@ -288,8 +288,8 @@ class TestMinimaxIntegration(unittest.TestCase):
     def test_no_heuristic_matches_disc_difference(self):
         from minimax import MinimaxAI
         plain = MinimaxAI(depth=3, time_limit=1e9)
-        h0 = MinimaxAI(depth=3, time_limit=1e9, heuristic=lambda b, p, t=None:
-                       sum(r.count(p.colour) - r.count(-p.colour) for r in b.board))
+        h0 = MinimaxAI(depth=3, time_limit=1e9, heuristic=lambda grid, colour, t=None:
+                       sum(r.count(colour) - r.count(-colour) for r in grid))
         for g, to_move in random_game_positions(seed=7, n_games=2):
             b = Board()
             b.board = g

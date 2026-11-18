@@ -1,6 +1,5 @@
-import copy
 import time
-from player import Player
+from board import valid_moves_grid, apply_move_grid
 
 
 class SearchTimeout(Exception):
@@ -23,6 +22,16 @@ MOVE_ORDER_WEIGHTS = [
 
 
 class MinimaxAI:
+    """
+    Minimax search with optional alpha-beta pruning and move ordering.
+
+    Public interface (unchanged): find_best_move(board, player) takes a Board
+    and a Player and returns (row, col), or None if there is no legal move.
+
+    Inside the search, positions are plain 8x8 lists ("grid": 1 = Black,
+    -1 = White, 0 = empty) and players are colour ints (1 or -1), so no
+    Board or Player objects are created at each node.
+    """
 
     def __init__(self, depth=4, search_mode="fixed", time_limit=5, use_pruning=True, use_move_ordering=True, heuristic=None):
         self.depth = depth
@@ -32,9 +41,12 @@ class MinimaxAI:
         self.use_move_ordering = use_move_ordering
         self.start_time = None
         self.nodes_evaluated = 0
+        # Best root score of the last completed search (for tests/experiments)
         self.last_score = None
-        # Heuristic: callable h(board, player, to_move) -> score, from player's
-        # point of view. None keeps the original evaluation (disc difference).
+        # Heuristic: callable h(grid, colour, to_move) -> score from colour's
+        # point of view (higher = better for colour). grid is an 8x8 list,
+        # colour and to_move are 1 (Black) or -1 (White). to_move is the side
+        # to move at that position. None = disc difference (original behaviour).
         self.heuristic = heuristic
 
         if search_mode not in ("fixed", "iterative"):
@@ -61,76 +73,62 @@ class MinimaxAI:
         Move Ordering (Maximizes Alpha-Beta Pruning):
         Sorts moves so that the most promising moves are examined first
         (e.g., checking corners like (0, 0) or (7, 7) before edge or center moves).
+        Python's sort is stable, so moves with equal priority keep their
+        row-by-row order from valid_moves_grid.
         """
         return sorted(moves, key=self.get_move_priority, reverse=True)
 
-    # Evaluation function: the heuristic if one was given, otherwise disc difference.
-    # to_move is the colour of the side to move at this position (used by H3's parity).
-    def evaluate(self, board, player, to_move=None):
+    # Evaluation of a position that is NOT finished: the heuristic if one was
+    # given, otherwise disc difference. to_move = side to move at this position.
+    def evaluate(self, grid, colour, to_move=None):
         if self.heuristic is not None:
-            return self.heuristic(board, player, to_move)
-        return self.disc_difference(board, player)
+            return self.heuristic(grid, colour, to_move)
+        return self.disc_difference(grid, colour)
 
-    # Actual disc difference (player's discs minus opponent's).
+    # Actual disc difference (colour's discs minus the opponent's).
     # Also used to score finished games, which must use the real result.
-    def disc_difference(self, board, player):
-        opponent_colour = -player.colour
-
-        player_score = sum(
-            row.count(player.colour)
-            for row in board.board
-        )
-
-        opponent_score = sum(
-            row.count(opponent_colour)
-            for row in board.board
-        )
-
-        return player_score - opponent_score
+    def disc_difference(self, grid, colour):
+        mine = theirs = 0
+        for row in grid:
+            mine += row.count(colour)
+            theirs += row.count(-colour)
+        return mine - theirs
 
     # Check whether time limit has expired
     def check_time(self):
         if time.perf_counter() - self.start_time >= self.time_limit:
             raise SearchTimeout
 
-    # Minimax algorithm with optional Alpha-Beta pruning and move ordering
-    def minimax(self, board, depth, current_player, maximizing, ai_player, alpha=float("-inf"), beta=float("inf")):
+    # Minimax algorithm with optional Alpha-Beta pruning and move ordering.
+    # grid: position; colour: side to move; ai_colour: the AI at the root
+    # (every score is from ai_colour's point of view).
+    def minimax(self, grid, depth, colour, maximizing, ai_colour, alpha=float("-inf"), beta=float("inf")):
         self.check_time()
         self.nodes_evaluated += 1
 
-        opponent = Player(-current_player.colour)
+        moves = valid_moves_grid(grid, colour)
 
-        moves = board.get_valid_moves(current_player)
-        opponent_moves = board.get_valid_moves(opponent)
-
-        # 1. Terminal state
-        if not moves and not opponent_moves:
-            # Finished game: score by the actual result, never by the heuristic
-            score = self.disc_difference(board, ai_player)
-
-            if score > 0:
-                return 100000 + score
-            elif score < 0:
-                return -100000 + score
-
-            return 0
-
-        # 2. Handle skipped turn
-        # Passing does not consume search depth
         if not moves:
-            return self.minimax(
-                board,
-                depth,
-                opponent,
-                not maximizing,
-                ai_player,
-                alpha,
-                beta
-            )
+            # The opponent's moves are only needed when this side has none
+            # 1. Terminal state: neither side can move
+            if not valid_moves_grid(grid, -colour):
+                # Finished game: score by the actual result, never by the heuristic
+                score = self.disc_difference(grid, ai_colour)
 
-        # 3. Depth limit
+                if score > 0:
+                    return 100000 + score
+                elif score < 0:
+                    return -100000 + score
+
+                return 0
+
+            # 2. Handle skipped turn
+            # Passing does not consume search depth
+            return self.minimax(grid, depth, -colour, not maximizing, ai_colour, alpha, beta)
+
+        # 3. Depth limit: estimate with the heuristic, telling it who is to move
         if depth == 0:
-            return self.evaluate(board, ai_player, current_player.colour)
+            return self.evaluate(grid, ai_colour, colour)
 
         # 4. Move ordering: only applied when Alpha-Beta pruning is enabled
         if self.should_order_moves:
@@ -143,18 +141,9 @@ class MinimaxAI:
             for i, j in moves:
                 self.check_time()
 
-                new_board = copy.deepcopy(board)
-                new_board.make_move(current_player, i, j)
+                new_grid = apply_move_grid(grid, colour, i, j)
 
-                score = self.minimax(
-                    new_board,
-                    depth - 1,
-                    opponent,
-                    False,
-                    ai_player,
-                    alpha,
-                    beta
-                )
+                score = self.minimax(new_grid, depth - 1, -colour, False, ai_colour, alpha, beta)
 
                 best_score = max(best_score, score)
 
@@ -172,18 +161,9 @@ class MinimaxAI:
             for i, j in moves:
                 self.check_time()
 
-                new_board = copy.deepcopy(board)
-                new_board.make_move(current_player, i, j)
+                new_grid = apply_move_grid(grid, colour, i, j)
 
-                score = self.minimax(
-                    new_board,
-                    depth - 1,
-                    opponent,
-                    True,
-                    ai_player,
-                    alpha,
-                    beta
-                )
+                score = self.minimax(new_grid, depth - 1, -colour, True, ai_colour, alpha, beta)
 
                 best_score = min(best_score, score)
 
@@ -196,7 +176,8 @@ class MinimaxAI:
 
     # Fixed-depth search
     def fixed_depth_search(self, board, player):
-        valid_moves = board.get_valid_moves(player)
+        grid, colour = board.board, player.colour
+        valid_moves = valid_moves_grid(grid, colour)
 
         if not valid_moves:
             return None
@@ -215,24 +196,13 @@ class MinimaxAI:
         alpha = float("-inf")
         beta = float("inf")
 
-        opponent = Player(-player.colour)
-
         try:
             for i, j in valid_moves:
                 self.check_time()
 
-                new_board = copy.deepcopy(board)
-                new_board.make_move(player, i, j)
+                new_grid = apply_move_grid(grid, colour, i, j)
 
-                score = self.minimax(
-                    new_board,
-                    self.depth - 1,
-                    opponent,
-                    False,
-                    player,
-                    alpha,
-                    beta
-                )
+                score = self.minimax(new_grid, self.depth - 1, -colour, False, colour, alpha, beta)
 
                 if score > best_score:
                     best_score = score
@@ -254,7 +224,8 @@ class MinimaxAI:
 
     # Iterative deepening search
     def iterative_deepening_search(self, board, player):
-        valid_moves = board.get_valid_moves(player)
+        grid, colour = board.board, player.colour
+        valid_moves = valid_moves_grid(grid, colour)
 
         if not valid_moves:
             return None
@@ -269,8 +240,6 @@ class MinimaxAI:
         # Safe fallback if depth 1 cannot finish
         best_move = valid_moves[0]
 
-        opponent = Player(-player.colour)
-
         for depth in range(1, self.depth + 1):
             try:
                 current_best_move = None
@@ -281,18 +250,9 @@ class MinimaxAI:
                 for i, j in valid_moves:
                     self.check_time()
 
-                    new_board = copy.deepcopy(board)
-                    new_board.make_move(player, i, j)
+                    new_grid = apply_move_grid(grid, colour, i, j)
 
-                    score = self.minimax(
-                        new_board,
-                        depth - 1,
-                        opponent,
-                        False,
-                        player,
-                        alpha,
-                        beta
-                    )
+                    score = self.minimax(new_grid, depth - 1, -colour, False, colour, alpha, beta)
 
                     if score > best_score:
                         best_score = score
@@ -303,6 +263,7 @@ class MinimaxAI:
 
                 # Update only after the entire iteration finishes
                 best_move = current_best_move
+                self.last_score = best_score
 
                 if self.use_pruning:
                     prune_label = "AlphaBeta + MoveOrdering" if self.should_order_moves else "AlphaBeta"
