@@ -1,6 +1,6 @@
 import copy
 import time
-from player import Player
+from core.player import Player
 
 
 class SearchTimeout(Exception):
@@ -38,17 +38,13 @@ class MinimaxAI:
         self.time_limit = time_limit
         self.use_pruning = use_pruning
         self.use_move_ordering = use_move_ordering
+        self.should_order_moves = use_pruning and use_move_ordering
         self.heuristic = heuristic
         self.start_time = None
         self.nodes_evaluated = 0
 
         if search_mode not in ("fixed", "iterative"):
             raise ValueError("Search mode must be 'fixed' or 'iterative'")
-
-    @property
-    def should_order_moves(self):
-        # Move ordering only works when Minimax is using Alpha-Beta pruning
-        return self.use_pruning and self.use_move_ordering
 
     def get_move_priority(self, move):
         """

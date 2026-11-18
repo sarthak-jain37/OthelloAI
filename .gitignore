@@ -23,3 +23,5 @@ Thumbs.db
 
 # Temporary files
 tempCodeRunnerFile.py
+tournament_results/
+tournament_matches.*
