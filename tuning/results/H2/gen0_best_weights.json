@@ -1,0 +1,20 @@
+{
+  "heuristic": "H2",
+  "gen0_best_weights": {
+    "corner": 30,
+    "x": 5.9779163466997876,
+    "c": 2.513441124531312,
+    "disc": 13.103456055987365,
+    "mobility": 3.747469744120308,
+    "frontier": 16.68542394995422,
+    "stability": 272.1186486500211
+  },
+  "note": "Best individual of generation 0 (a random variation of the literature weights), kept for reference. Tuned H2 beats it 65.6% on held-out openings, so use tuned_weights.json.",
+  "gen0_fitness": 0.9125,
+  "validation_heldout": {
+    "gen0_best_vs_literature": 0.8506,
+    "tuned_vs_literature": 0.875,
+    "tuned_vs_gen0_best": 0.6562,
+    "games_per_match": 800
+  }
+}

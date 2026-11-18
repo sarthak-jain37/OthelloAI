@@ -1,0 +1,29 @@
+{
+  "heuristic": "H3",
+  "gen0_best_weights": {
+    "corner_o": 30,
+    "x_o": 3.2132613599605957,
+    "c_o": 20.341674032450506,
+    "disc_o": 3.3050004828922517,
+    "mobility_o": 4.159514586452721,
+    "frontier_o": 14.036867782033436,
+    "stability_o": 234.13150693335726,
+    "parity_o": 0.0,
+    "corner_e": 44.93234072102827,
+    "x_e": 4.945572131995033,
+    "c_e": 0.0,
+    "disc_e": 34.56315882651981,
+    "mobility_e": 13.726777795012556,
+    "frontier_e": 12.746461684335259,
+    "stability_e": 145.6419859893717,
+    "parity_e": 16.5667139231221
+  },
+  "note": "Best individual of generation 0 (a random variation of the literature weights), kept for reference. Tuned H3 beats it 78.4% on held-out openings, so use tuned_weights.json.",
+  "gen0_fitness": 0.85,
+  "validation_heldout": {
+    "gen0_best_vs_literature": 0.7519,
+    "tuned_vs_literature": 0.8306,
+    "tuned_vs_gen0_best": 0.7837,
+    "games_per_match": 800
+  }
+}

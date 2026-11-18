@@ -1,0 +1,34 @@
+Tuning H2: 6 free genes, fixed {'corner': 30}; pop 20, 20 generations, 40 games each, depth 4, 14 workers; max |score| 76500
+Python 3.13.15 on Windows-11-10.0.26300-SP0, 22 logical processors
+gen  0: best  91.2% (vs anchor  87.5%, vs champion  95.0%), mean  40.4%, 3.3 min | {'x': 5.978, 'c': 2.513, 'disc': 13.103, 'mobility': 3.747, 'frontier': 16.685, 'stability': 272.119}
+gen  1: best  75.0% (vs anchor  85.0%, vs champion  65.0%), mean  43.9%, 3.4 min | {'x': 18.298, 'c': 5.042, 'disc': 17.691, 'mobility': 11.453, 'frontier': 20.003, 'stability': 10.987}
+gen  2: best  71.2% (vs anchor  90.0%, vs champion  52.5%), mean  58.3%, 3.5 min | {'x': 9.688, 'c': 1.503, 'disc': 21.372, 'mobility': 4.783, 'frontier': 20.203, 'stability': 210.293}
+gen  3: best  86.2% (vs anchor  95.0%, vs champion  77.5%), mean  70.3%, 3.4 min | {'x': 15.479, 'c': 2.428, 'disc': 23.165, 'mobility': 11.544, 'frontier': 27.692, 'stability': 71.514}
+gen  4: best  78.8% (vs anchor 100.0%, vs champion  57.5%), mean  64.8%, 3.6 min | {'x': 17.093, 'c': 4.196, 'disc': 15.022, 'mobility': 8.425, 'frontier': 19.909, 'stability': 93.75}
+gen  5: best  81.2% (vs anchor  82.5%, vs champion  80.0%), mean  65.6%, 3.9 min | {'x': 17.093, 'c': 4.258, 'disc': 13.433, 'mobility': 9.189, 'frontier': 19.408, 'stability': 251.181}
+gen  6: best  78.8% (vs anchor  85.0%, vs champion  72.5%), mean  65.8%, 3.7 min | {'x': 11.303, 'c': 12.444, 'disc': 9.327, 'mobility': 14.334, 'frontier': 22.401, 'stability': 176.024}
+gen  7: best  75.0% (vs anchor  90.0%, vs champion  60.0%), mean  64.9%, 3.8 min | {'x': 16.818, 'c': 18.493, 'disc': 6.875, 'mobility': 14.334, 'frontier': 22.401, 'stability': 150.712}
+gen  8: best  72.5% (vs anchor  90.0%, vs champion  55.0%), mean  66.0%, 3.8 min | {'x': 15.747, 'c': 10.741, 'disc': 16.081, 'mobility': 13.279, 'frontier': 24.466, 'stability': 259.885}
+gen  9: best  71.2% (vs anchor  80.0%, vs champion  62.5%), mean  63.8%, 3.5 min | {'x': 15.747, 'c': 11.988, 'disc': 16.081, 'mobility': 17.688, 'frontier': 20.691, 'stability': 259.885}
+gen 10: best  73.8% (vs anchor  95.0%, vs champion  52.5%), mean  63.7%, 3.4 min | {'x': 22.036, 'c': 11.504, 'disc': 16.081, 'mobility': 13.187, 'frontier': 24.936, 'stability': 259.885}
+gen 11: best  77.5% (vs anchor  80.0%, vs champion  75.0%), mean  67.1%, 3.5 min | {'x': 19.171, 'c': 12.049, 'disc': 18.062, 'mobility': 13.349, 'frontier': 23.408, 'stability': 272.976}
+gen 12: best  85.0% (vs anchor  95.0%, vs champion  75.0%), mean  70.9%, 3.7 min | {'x': 20.63, 'c': 9.105, 'disc': 8.747, 'mobility': 17.026, 'frontier': 20.876, 'stability': 270.449}
+gen 13: best  70.0% (vs anchor  90.0%, vs champion  50.0%), mean  56.2%, 3.8 min | {'x': 23.391, 'c': 11.504, 'disc': 16.081, 'mobility': 26.109, 'frontier': 24.693, 'stability': 229.174}
+gen 14: best  81.2% (vs anchor  95.0%, vs champion  67.5%), mean  71.8%, 3.7 min | {'x': 22.632, 'c': 9.718, 'disc': 17.694, 'mobility': 16.826, 'frontier': 23.939, 'stability': 231.158}
+gen 15: best  82.5% (vs anchor  95.0%, vs champion  70.0%), mean  68.0%, 3.8 min | {'x': 18.21, 'c': 11.422, 'disc': 18.876, 'mobility': 16.325, 'frontier': 22.945, 'stability': 225.251}
+gen 16: best  77.5% (vs anchor  90.0%, vs champion  65.0%), mean  69.4%, 3.6 min | {'x': 18.21, 'c': 9.439, 'disc': 18.876, 'mobility': 16.325, 'frontier': 28.987, 'stability': 211.022}
+gen 17: best  83.8% (vs anchor  97.5%, vs champion  70.0%), mean  70.2%, 3.8 min | {'x': 20.824, 'c': 9.826, 'disc': 15.539, 'mobility': 27.64, 'frontier': 22.898, 'stability': 233.319}
+gen 18: best  78.8% (vs anchor  95.0%, vs champion  62.5%), mean  70.4%, 3.5 min | {'x': 21.745, 'c': 12.277, 'disc': 21.423, 'mobility': 20.664, 'frontier': 22.649, 'stability': 217.434}
+gen 19: best  80.0% (vs anchor  95.0%, vs champion  65.0%), mean  71.4%, 3.3 min | {'x': 15.422, 'c': 10.918, 'disc': 17.204, 'mobility': 12.072, 'frontier': 29.709, 'stability': 314.182}
+
+Playoff: 6 candidates x 200 games vs the anchor
+  champion gen 17         89.0%  margin +26.20  (200 games)
+  final gen #1            88.5%  margin +27.50  (200 games)
+  final gen #2            88.0%  margin +24.11  (200 games)
+  final gen #3            87.8%  margin +24.84  (200 games)
+  champion gen 18         87.8%  margin +24.56  (200 games)
+  final gen #4            86.8%  margin +24.73  (200 games)
+
+Tuned H2 weights: {'corner': 30, 'x': 20.823655108940706, 'c': 9.826242394770249, 'disc': 15.53920405800361, 'mobility': 27.640331191727398, 'frontier': 22.89810130699876, 'stability': 233.31895958381742}
+Score vs literature weights in playoff: 89.0%
+Total time 1.27 h. Saved results\H2\tuned_weights.json

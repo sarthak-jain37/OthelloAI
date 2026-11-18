@@ -65,11 +65,17 @@ class NegamaxAI:
         """
         return sorted(moves, key=self.get_move_priority, reverse=True)
 
-    # Evaluation function
-    def evaluate(self, board, player):
+    # Evaluation of a position that is NOT finished: the heuristic if one was
+    # given, otherwise disc difference. to_move = colour of the side to move.
+    # Heuristics are called as h(grid, colour, to_move), the same as in MinimaxAI.
+    def evaluate(self, board, player, to_move=None):
         if self.heuristic is not None:
-            return self.heuristic(board, player)
+            return self.heuristic(board.board, player.colour, to_move)
+        return self.disc_difference(board, player)
 
+    # Actual disc difference (player's discs minus opponent's).
+    # Also used to score finished games, which must use the real result.
+    def disc_difference(self, board, player):
         opponent_colour = -player.colour
 
         player_score = sum(
@@ -101,7 +107,8 @@ class NegamaxAI:
 
         # 1. Terminal state
         if not moves and not opponent_moves:
-            score = self.evaluate(board, current_player)
+            # Finished game: score by the actual result, never by the heuristic
+            score = self.disc_difference(board, current_player)
 
             if score > 0:
                 return 100000 + score
@@ -128,9 +135,9 @@ class NegamaxAI:
                     opponent
                 )
 
-        # 3. Depth limit
+        # 3. Depth limit: estimate with the heuristic, telling it who is to move
         if depth == 0:
-            return self.evaluate(board, current_player)
+            return self.evaluate(board, current_player, current_player.colour)
 
         # 4. Move ordering: only applied when Alpha-Beta pruning is enabled
         if self.should_order_moves:

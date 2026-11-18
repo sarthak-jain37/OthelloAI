@@ -1,0 +1,18 @@
+{
+  "heuristic": "H1",
+  "gen0_best_weights": {
+    "x": -42.36773394386043,
+    "c": -5.439908679215648,
+    "edge_base": 9.669627215952493,
+    "interior_base": -8.783130773994792,
+    "disc": 0.30820488654295974
+  },
+  "note": "Alternative to the tuned H1 weights. Validation on the 400 held-out openings: it beats the literature weights 77.5% (tuned H1: 85.2%) but beats tuned H1 head-to-head (tuned H1 scores only 44.1% against it). Strength here is not transitive, so neither is clearly the best H1. Tuned H1 (tuned_weights.json) is the official H1, chosen by the method fixed in advance; this one is provided for transparency and as an optional extra check.",
+  "gen0_fitness": 0.8625,
+  "validation_heldout": {
+    "gen0_best_vs_literature": 0.775,
+    "tuned_vs_literature": 0.8519,
+    "tuned_vs_gen0_best": 0.4412,
+    "games_per_match": 800
+  }
+}
