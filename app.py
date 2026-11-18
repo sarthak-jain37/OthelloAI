@@ -1,9 +1,9 @@
 import time
 import streamlit as st
-from board import Board
-from player import Player
-from minimax import MinimaxAI
-from baseline_ai import GreedyAI, RandomAI
+from core.board import Board
+from core.player import Player
+from algorithms.minimax import MinimaxAI
+from algorithms.baseline_ai import GreedyAI, RandomAI
 
 st.set_page_config(
     page_title="Othello",

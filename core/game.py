@@ -1,8 +1,8 @@
-from board import Board
-from player import Player
-from minimax import MinimaxAI
-from baseline_ai import GreedyAI, RandomAI
-from terminal_ui import display_board
+from core.board import Board
+from core.player import Player
+from algorithms.minimax import MinimaxAI
+from algorithms.baseline_ai import GreedyAI, RandomAI
+from ui.terminal_ui import display_board
 
 
 class Game:

@@ -1,4 +1,4 @@
-from player import Player
+from core.player import Player
 
 DIRECTIONS = [
             (-1, -1), (-1, 0), (-1, 1),

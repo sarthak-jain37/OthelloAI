@@ -1,6 +1,6 @@
 import copy
 import time
-from player import Player
+from core.player import Player
 
 
 class SearchTimeout(Exception):
