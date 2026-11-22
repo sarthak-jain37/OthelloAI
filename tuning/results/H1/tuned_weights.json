@@ -1,0 +1,117 @@
+{
+  "heuristic": "H1",
+  "tuned_weights": {
+    "x": -39.91549786682132,
+    "c": -9.176685539847238,
+    "edge_base": 2.1165104069431426,
+    "interior_base": -3.506714604848313,
+    "disc": 0.8366088105759197
+  },
+  "literature_weights": {
+    "x": -50,
+    "c": -20,
+    "edge_base": 5,
+    "interior_base": -1,
+    "disc": 1.0
+  },
+  "playoff": [
+    {
+      "candidate": "champion gen 18",
+      "score_vs_anchor": 0.89,
+      "mean_margin": 19.37,
+      "games": 200,
+      "weights": {
+        "x": -39.91549786682132,
+        "c": -9.176685539847238,
+        "edge_base": 2.1165104069431426,
+        "interior_base": -3.506714604848313,
+        "disc": 0.8366088105759197
+      }
+    },
+    {
+      "candidate": "final gen #1",
+      "score_vs_anchor": 0.7875,
+      "mean_margin": 14.18,
+      "games": 200,
+      "weights": {
+        "x": -31.957546046604357,
+        "c": -10.805562617829393,
+        "edge_base": 1.0348056539110175,
+        "interior_base": -4.038607220471258,
+        "disc": 0.6588586013876288
+      }
+    },
+    {
+      "candidate": "champion gen 17",
+      "score_vs_anchor": 0.7725,
+      "mean_margin": 12.445,
+      "games": 200,
+      "weights": {
+        "x": -37.25919084303969,
+        "c": -9.054759725456998,
+        "edge_base": 0.23240820993205724,
+        "interior_base": -3.9358118320124382,
+        "disc": 0.6049838209094389
+      }
+    },
+    {
+      "candidate": "final gen #4",
+      "score_vs_anchor": 0.77,
+      "mean_margin": 12.595,
+      "games": 200,
+      "weights": {
+        "x": -37.24553182053259,
+        "c": -19.524889330029996,
+        "edge_base": 1.305822480552954,
+        "interior_base": -3.8657410873385327,
+        "disc": 0.42498512045921305
+      }
+    },
+    {
+      "candidate": "final gen #2",
+      "score_vs_anchor": 0.765,
+      "mean_margin": 13.615,
+      "games": 200,
+      "weights": {
+        "x": -32.07460153075456,
+        "c": -8.983675115098269,
+        "edge_base": -0.1615339342081204,
+        "interior_base": -3.9213734804799962,
+        "disc": 0.6344922616063023
+      }
+    },
+    {
+      "candidate": "final gen #3",
+      "score_vs_anchor": 0.7375,
+      "mean_margin": 11.4,
+      "games": 200,
+      "weights": {
+        "x": -39.03174294046161,
+        "c": -10.738997590867013,
+        "edge_base": 0.5150444220591907,
+        "interior_base": -3.315387639539372,
+        "disc": 0.20719522340214203
+      }
+    }
+  ],
+  "settings": {
+    "heuristic": "H1",
+    "pop": 20,
+    "gens": 20,
+    "games": 40,
+    "depth": 4,
+    "elites": 2,
+    "cx_prob": 0.7,
+    "playoff_games": 200,
+    "seed": 2026,
+    "plies": 6,
+    "n_tune": 600,
+    "n_heldout": 400,
+    "out": "results"
+  },
+  "wall_hours": 0.4324406689405441,
+  "workers": 14,
+  "approx_cpu_hours": 6.054169365167618,
+  "python": "3.13.15",
+  "platform": "Windows-11-10.0.26300-SP0"
+}

@@ -1,0 +1,34 @@
+Tuning H1: 5 free genes, fixed {}; pop 20, 20 generations, 40 games each, depth 4, 14 workers; max |score| 3560
+Python 3.13.15 on Windows-11-10.0.26300-SP0, 22 logical processors
+gen  0: best  86.2% (vs anchor  90.0%, vs champion  82.5%), mean  43.2%, 1.2 min | {'x': -42.368, 'c': -5.44, 'edge_base': 9.67, 'interior_base': -8.783, 'disc': 0.308}
+gen  1: best  75.0% (vs anchor  95.0%, vs champion  55.0%), mean  47.4%, 1.2 min | {'x': -42.878, 'c': -11.928, 'edge_base': 4.941, 'interior_base': -2.121, 'disc': 0.0}
+gen  2: best  72.5% (vs anchor  87.5%, vs champion  57.5%), mean  54.8%, 1.1 min | {'x': -23.709, 'c': 0.0, 'edge_base': 7.288, 'interior_base': -8.109, 'disc': 1.079}
+gen  3: best  73.8% (vs anchor  85.0%, vs champion  62.5%), mean  65.2%, 1.3 min | {'x': -34.747, 'c': -0.915, 'edge_base': 8.848, 'interior_base': -8.081, 'disc': 0.671}
+gen  4: best  78.8% (vs anchor  80.0%, vs champion  77.5%), mean  65.4%, 1.2 min | {'x': -45.159, 'c': -16.748, 'edge_base': 5.53, 'interior_base': -5.175, 'disc': 0.0}
+gen  5: best  77.5% (vs anchor  80.0%, vs champion  75.0%), mean  59.5%, 1.2 min | {'x': -35.695, 'c': -6.059, 'edge_base': 0.036, 'interior_base': -5.007, 'disc': 0.531}
+gen  6: best  68.8% (vs anchor  80.0%, vs champion  57.5%), mean  59.4%, 1.3 min | {'x': -28.781, 'c': -6.059, 'edge_base': 0.036, 'interior_base': -4.479, 'disc': 0.531}
+gen  7: best  71.2% (vs anchor  95.0%, vs champion  47.5%), mean  56.8%, 1.3 min | {'x': -44.373, 'c': -6.161, 'edge_base': 0.901, 'interior_base': -4.443, 'disc': 0.715}
+gen  8: best  72.5% (vs anchor  90.0%, vs champion  55.0%), mean  58.5%, 1.3 min | {'x': -41.358, 'c': -12.029, 'edge_base': 11.255, 'interior_base': -8.767, 'disc': 1.359}
+gen  9: best  86.2% (vs anchor  87.5%, vs champion  85.0%), mean  67.9%, 1.2 min | {'x': -44.373, 'c': -6.161, 'edge_base': 0.901, 'interior_base': -4.443, 'disc': 0.715}
+gen 10: best  72.5% (vs anchor  85.0%, vs champion  60.0%), mean  62.1%, 1.3 min | {'x': -30.656, 'c': -10.69, 'edge_base': 1.86, 'interior_base': -2.39, 'disc': 0.0}
+gen 11: best  78.8% (vs anchor  95.0%, vs champion  62.5%), mean  65.9%, 1.2 min | {'x': -39.958, 'c': -7.452, 'edge_base': 3.513, 'interior_base': -4.158, 'disc': 0.089}
+gen 12: best  82.5% (vs anchor  90.0%, vs champion  75.0%), mean  68.6%, 1.2 min | {'x': -33.277, 'c': -6.759, 'edge_base': 0.689, 'interior_base': -2.776, 'disc': 0.443}
+gen 13: best  73.8% (vs anchor  75.0%, vs champion  72.5%), mean  61.3%, 1.2 min | {'x': -42.935, 'c': -8.208, 'edge_base': 0.75, 'interior_base': -4.875, 'disc': 0.421}
+gen 14: best  80.0% (vs anchor  80.0%, vs champion  80.0%), mean  66.6%, 1.3 min | {'x': -39.688, 'c': -9.112, 'edge_base': 1.446, 'interior_base': -4.937, 'disc': 0.607}
+gen 15: best  78.8% (vs anchor  90.0%, vs champion  67.5%), mean  66.2%, 1.3 min | {'x': -38.73, 'c': -8.638, 'edge_base': 1.303, 'interior_base': -3.675, 'disc': 0.516}
+gen 16: best  75.0% (vs anchor  82.5%, vs champion  67.5%), mean  60.4%, 1.2 min | {'x': -38.226, 'c': -12.303, 'edge_base': 1.104, 'interior_base': -4.663, 'disc': 0.5}
+gen 17: best  77.5% (vs anchor  85.0%, vs champion  70.0%), mean  59.5%, 1.2 min | {'x': -37.259, 'c': -9.055, 'edge_base': 0.232, 'interior_base': -3.936, 'disc': 0.605}
+gen 18: best  76.2% (vs anchor  95.0%, vs champion  57.5%), mean  61.1%, 1.2 min | {'x': -39.915, 'c': -9.177, 'edge_base': 2.117, 'interior_base': -3.507, 'disc': 0.837}
+gen 19: best  77.5% (vs anchor  85.0%, vs champion  70.0%), mean  68.4%, 1.1 min | {'x': -31.958, 'c': -10.806, 'edge_base': 1.035, 'interior_base': -4.039, 'disc': 0.659}
+
+Playoff: 6 candidates x 200 games vs the anchor
+  champion gen 18         89.0%  margin +19.37  (200 games)
+  final gen #1            78.8%  margin +14.18  (200 games)
+  champion gen 17         77.2%  margin +12.45  (200 games)
+  final gen #4            77.0%  margin +12.60  (200 games)
+  final gen #2            76.5%  margin +13.62  (200 games)
+  final gen #3            73.8%  margin +11.40  (200 games)
+
+Tuned H1 weights: {'x': -39.91549786682132, 'c': -9.176685539847238, 'edge_base': 2.1165104069431426, 'interior_base': -3.506714604848313, 'disc': 0.8366088105759197}
+Score vs literature weights in playoff: 89.0%
+Total time 0.43 h. Saved results\H1\tuned_weights.json
