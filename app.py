@@ -3,7 +3,9 @@ import streamlit as st
 from core.board import Board
 from core.player import Player
 from algorithms.minimax import MinimaxAI
+from algorithms.negamax import NegamaxAI
 from algorithms.baseline_ai import GreedyAI, RandomAI
+from algorithms.heuristics import H0, H1, H2, H3
 
 st.set_page_config(
     page_title="Othello",
@@ -226,19 +228,31 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-def create_ai_agent(algorithm_name, depth, search_mode, time_limit):
-    """Instantiate AI agent."""
-    if algorithm_name == "Alpha-Beta + Move Ordering":
-        return MinimaxAI(depth=depth, search_mode=search_mode, time_limit=time_limit, use_pruning=True, use_move_ordering=True)
-    elif algorithm_name == "Alpha-Beta (No Move Ordering)":
-        return MinimaxAI(depth=depth, search_mode=search_mode, time_limit=time_limit, use_pruning=True, use_move_ordering=False)
-    elif algorithm_name == "Plain Minimax (No Pruning)":
-        return MinimaxAI(depth=depth, search_mode=search_mode, time_limit=time_limit, use_pruning=False, use_move_ordering=False)
+def create_ai_agent(algorithm_name, depth, search_mode, time_limit, heuristic_name="H2"):
+    """Instantiate AI agent with selected algorithm and evaluation heuristic."""
+    heuristic_map = {
+        "H0 (Disc Difference)": H0(),
+        "H1 (Positional Table)": H1(),
+        "H2 (Corners, Mobility, Stability)": H2(),
+        "H3 (Full 9 Features + Phase Blend)": H3(),
+        "None (Default Disc Count)": None
+    }
+    h_fn = heuristic_map.get(heuristic_name)
+
+    if algorithm_name in ["Minimax (Alpha-Beta + Move Ordering)", "Alpha-Beta + Move Ordering"]:
+        return MinimaxAI(depth=depth, search_mode=search_mode, time_limit=time_limit, use_pruning=True, use_move_ordering=True, heuristic=h_fn)
+    elif algorithm_name in ["Negamax (Alpha-Beta + Move Ordering)", "Negamax"]:
+        return NegamaxAI(depth=depth, search_mode=search_mode, time_limit=time_limit, use_pruning=True, use_move_ordering=True, heuristic=h_fn)
+    elif algorithm_name in ["Alpha-Beta (No Move Ordering)", "Minimax (Alpha-Beta)"]:
+        return MinimaxAI(depth=depth, search_mode=search_mode, time_limit=time_limit, use_pruning=True, use_move_ordering=False, heuristic=h_fn)
+    elif algorithm_name in ["Plain Minimax (No Pruning)", "Minimax", "Plain Minimax"]:
+        return MinimaxAI(depth=depth, search_mode=search_mode, time_limit=time_limit, use_pruning=False, use_move_ordering=False, heuristic=h_fn)
     elif algorithm_name == "Greedy AI":
         return GreedyAI()
     elif algorithm_name == "Random AI":
         return RandomAI()
-    return None
+    # Safe default fallback
+    return MinimaxAI(depth=depth, search_mode=search_mode, time_limit=time_limit, use_pruning=True, use_move_ordering=True, heuristic=h_fn)
 
 
 def init_game():
@@ -270,11 +284,20 @@ with st.sidebar:
     )
 
     ai_options = [
-        "Alpha-Beta + Move Ordering",
-        "Alpha-Beta (No Move Ordering)",
-        "Plain Minimax (No Pruning)",
+        "Minimax (Alpha-Beta + Move Ordering)",
+        "Negamax (Alpha-Beta + Move Ordering)",
+        "Minimax (Alpha-Beta)",
+        "Minimax",
         "Greedy AI",
         "Random AI"
+    ]
+
+    heuristic_options = [
+        "H3 (Full 9 Features + Phase Blend)",
+        "H2 (Corners, Mobility, Stability)",
+        "H1 (Positional Table)",
+        "H0 (Disc Difference)",
+        "None (Default Disc Count)"
     ]
 
     black_is_bot = "AI (Black)" in game_mode or game_mode == "AI vs AI"
@@ -282,20 +305,26 @@ with st.sidebar:
     if black_is_bot:
         st.subheader("⚫ Black AI Settings")
         b_algo = st.selectbox("Algorithm", ai_options, index=0, key="b_algo")
+        b_heur = "H2 (Corners, Mobility, Stability)"
+        if "AI" not in b_algo or "Alpha" in b_algo or "Minimax" in b_algo or "Negamax" in b_algo:
+            b_heur = st.selectbox("Evaluation Heuristic", heuristic_options, index=0, key="b_heur")
         b_depth = st.slider("Depth", 1, 10, 6, key="b_depth")
         b_mode = st.selectbox("Mode", ["iterative", "fixed"], index=0, key="b_mode")
         b_time = st.slider("Time Limit (s)", 1, 5, 2, key="b_time")
-        black_agent = create_ai_agent(b_algo, b_depth, b_mode, b_time)
+        black_agent = create_ai_agent(b_algo, b_depth, b_mode, b_time, b_heur)
 
     white_is_bot = "AI (White)" in game_mode or game_mode == "AI vs AI"
     white_agent = None
     if white_is_bot:
         st.subheader("⚪ White AI Settings")
         w_algo = st.selectbox("Algorithm", ai_options, index=0, key="w_algo")
+        w_heur = "H2 (Corners, Mobility, Stability)"
+        if "AI" not in w_algo or "Alpha" in w_algo or "Minimax" in w_algo or "Negamax" in w_algo:
+            w_heur = st.selectbox("Evaluation Heuristic", heuristic_options, index=0, key="w_heur")
         w_depth = st.slider("Depth", 1, 10, 6, key="w_depth")
         w_mode = st.selectbox("Mode", ["iterative", "fixed"], index=0, key="w_mode")
         w_time = st.slider("Time Limit (s)", 1, 5, 2, key="w_time")
-        white_agent = create_ai_agent(w_algo, w_depth, w_mode, w_time)
+        white_agent = create_ai_agent(w_algo, w_depth, w_mode, w_time, w_heur)
 
     st.markdown("---")
     if st.button("🔄 New Game", use_container_width=True):
@@ -414,7 +443,7 @@ with st.container(key="board_container"):
 
 
 # --- AI TURN HANDLING ---
-if not st.session_state.game_over and current_player.is_bot:
+if not st.session_state.game_over and current_player.is_bot and current_player.algorithm is not None:
     ai_can_step = True
     if game_mode == "AI vs AI" and not auto_step:
         ai_can_step = st.button("▶️ Step AI Move", use_container_width=True)
